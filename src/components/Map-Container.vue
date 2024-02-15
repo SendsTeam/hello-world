@@ -10,7 +10,7 @@ const { width, height } = withDefaults(
         height?: string
     }>(),
     {
-        width: '500px',
+        width: '100%',
         height: '100%'
     }
 )
@@ -22,14 +22,14 @@ const mapStyle = {
 
 //实时定位
 //#region
-navigator.geolocation.watchPosition(
-    (pos) => {
-        console.log(pos.coords)
-    },
-    (err) => {
-        console.log(err)
-    }
-)
+// navigator.geolocation.watchPosition(
+//     (pos) => {
+//         console.log(pos.coords)
+//     },
+//     (err) => {
+//         console.log(err)
+//     }
+// )
 
 //#endregion
 
@@ -40,15 +40,22 @@ const mapStore = useMapStore()
 await mapStore.initMap()
 onMounted(() => {
     if (!mapRef.value) return
-    navigator.geolocation.getCurrentPosition((pos) => {
-        mapStore.newMap(mapRef.value!, {
-            viewMode: '3D',
-            center: [pos.coords.longitude, pos.coords.latitude],
-            zoom: 200
-        })
-        console.log(pos.coords)
-    })
-    // mapStore.newMap(mapRef.value!)
+    // navigator.geolocation.getCurrentPosition(
+    //     (pos) => {
+    //         // mapStore.newMap(mapRef.value!, {
+    //         //     viewMode: '3D',
+    //         //     center: [pos.coords.longitude, pos.coords.latitude],
+    //         //     zoom: 200
+    //         // })
+    //         mapStore.newMap(mapRef.value!)
+    //     },
+    //     (err) => {
+    //         alert('定位失败!')
+    //         console.log(err)
+    //     },
+    //     { enableHighAccuracy: true }
+    // )
+    mapStore.newMap(mapRef.value!)
 })
 
 //#endregion
