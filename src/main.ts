@@ -11,5 +11,9 @@ const app = createApp(App)
 
 app.use(pinia)
 app.use(router)
+app.config.errorHandler = (err) => {
+    alert(err)
+    console.log(err)
+}
 
 app.mount('#app')
