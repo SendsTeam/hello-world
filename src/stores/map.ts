@@ -2,10 +2,10 @@ import { defineStore } from 'pinia'
 import '@amap/amap-jsapi-types'
 import { ref } from 'vue'
 
-export const useMapStore = defineStore('map_store', () => {
+export const useMapStore = defineStore('map-store', () => {
     const isMapReady = ref(false)
     const _isInited = ref(false)
-    const map = ref<AMap.Map>()
+    const currentMap = ref<AMap.Map>()
     async function initMap() {
         if (_isInited.value) return
         isMapReady.value = true
@@ -14,12 +14,25 @@ export const useMapStore = defineStore('map_store', () => {
 
     //创建标记
     //#region
-    function newMarker(position: [number, number]): AMap.Marker {
+    type MarkerPreset = {
+        [key in 'Blue']: string
+    }
+    const _MarkerPresetMap: MarkerPreset = {
+        Blue: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png'
+    }
+    function newMarker(
+        position: [number, number],
+        preset: keyof MarkerPreset = 'Blue'
+    ): AMap.Marker {
         const marker = new AMap.Marker({
-            icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png',
+            icon: new AMap.Icon({
+                image: _MarkerPresetMap[preset],
+                imageSize: new AMap.Size(32, 40) //根据所设置的大小拉伸或压缩图片
+            }),
             position,
+            zooms: [15, 20]
         })
-        marker.setMap(map.value)
+        marker.setMap(currentMap.value)
         return marker
     }
     //#endregion
@@ -60,7 +73,7 @@ export const useMapStore = defineStore('map_store', () => {
         }
     ) {
         if (!_isInited.value) return
-        map.value = new AMap.Map(el, opts)
+        currentMap.value = new AMap.Map(el, opts)
     }
     //#endregion
 
@@ -69,6 +82,7 @@ export const useMapStore = defineStore('map_store', () => {
         newMap,
         newMarker,
         fixPosition,
+        currentMap,
         isMapReady
     }
 })
