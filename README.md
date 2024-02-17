@@ -1,52 +1,30 @@
-# HelloWorld
+# HELLO WORLD
 
-This template should help get you started developing with Vue 3 in Vite.
+你说的对,但是《你好世界》是由桑梓网络创新实验室自主研发的一款基于微信端h5的社交小游戏。游戏发生在一个被称作「华侨大学」的真实世界,在这里,你可以在你所处的位置发布自己的内容卡片,引导高德地图之力。你将扮演一位名为「大学生」的神秘角色,在自由的旅途中邂逅在此发生的每一件趣事。
 
-## Recommended IDE Setup
+# 技术栈
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+前端: Vue3 Typescript Pinia VueRouter Naive-UI AMap(高德地图jsapi 2.0)
 
-## Type Support for `.vue` Imports in TS
+后端: Bun(目前暂时不支持windows环境) Typescript Mongodb Elysia
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+# 架构
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+本项目采用monorepo架构来组织.
+包含3个packages: backend,frontend_admin,frontend_prod
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+# Roadmap
 
-## Customize configuration
+之后要做啥?
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+## 内容审核
 
-## Project Setup
+1. 结合AI+人审,提高审核效率
 
-```sh
-npm install
-```
+## 从特定用户源解耦
 
-### Compile and Hot-Reload for Development
+1. 封装一个通用的用户系统,使用户不限于华侨大学校内用户
 
-```sh
-npm run dev
-```
+## 创意工坊
 
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+1. 提供API与模组平台供感兴趣的开发者开发模组
