@@ -12,8 +12,9 @@ export const useMapStore = defineStore('map-store', () => {
         _isInited.value = true
     }
 
-    //创建标记
+    //标记
     //#region
+    const markers = ref<AMap.Marker[]>([])
     type MarkerPreset = {
         [key in 'Blue']: string
     }
@@ -33,7 +34,13 @@ export const useMapStore = defineStore('map-store', () => {
             zooms: [15, 20]
         })
         marker.setMap(currentMap.value)
+        markers.value.push(marker)
         return marker
+    }
+    function clearMarkers() {
+        markers.value.forEach((marker) => {
+            marker.clearEvents('click').destroy()
+        })
     }
     //#endregion
 
@@ -81,6 +88,7 @@ export const useMapStore = defineStore('map-store', () => {
         initMap,
         newMap,
         newMarker,
+        clearMarkers,
         fixPosition,
         currentMap,
         isMapReady
