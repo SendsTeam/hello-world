@@ -6,8 +6,8 @@
         "cypress.config.*",
         "nightwatch.conf.*",
         "playwright.config.*",
-        "packages/frontend_client/vite.config.ts",
-        "packages/frontend_client/vitest.config.ts"
+        "packages/**/vite.config.ts",
+        "packages/**/vitest.config.ts"
     ],
     "compilerOptions": {
         "composite": true,
