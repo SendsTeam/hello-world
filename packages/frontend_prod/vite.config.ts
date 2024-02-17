@@ -8,8 +8,8 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 export default defineConfig({
     server: {
         https: {
-            cert: '../../../ssl/full_chain.pem',
-            key: '../../../ssl/private.key'
+            cert: '../../../../../ssl/full_chain.pem',
+            key: '../../../../../ssl/private.key'
         }
     },
     plugins: [vue(), vueJsx()],

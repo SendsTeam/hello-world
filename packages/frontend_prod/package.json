@@ -1,0 +1,20 @@
+{
+    "name": "frontend_prod",
+    "private": true,
+    "version": "1.0.0",
+    "description": "hello-world prod",
+    "main": "src/main.ts",
+    "scripts": {
+        "dev": "vite --host --port=5000",
+        "build": "run-p type-check \"build-only {@}\" --",
+        "preview": "vite preview",
+        "test:unit": "vitest",
+        "build-only": "vite build",
+        "type-check": "vue-tsc --build --force",
+        "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+        "format": "prettier --write src/"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}
