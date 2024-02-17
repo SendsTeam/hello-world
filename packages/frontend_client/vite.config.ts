@@ -8,6 +8,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 export default defineConfig({
     server: {
         https: {
+            // 这里要根据开发环境换成不同的路径!
             cert: '../../../../../ssl/full_chain.pem',
             key: '../../../../../ssl/private.key'
         }

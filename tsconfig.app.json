@@ -1,18 +1,17 @@
 {
     "extends": "@vue/tsconfig/tsconfig.dom.json",
     "include": [
-        "packages/frontend_prod/env.d.ts",
-        "packages/frontend_prod/src/**/*",
-        "packages/frontend_prod/src/**/*.vue"
+        "packages/frontend_client/env.d.ts",
+        "packages/frontend_client/src/**/*",
+        "packages/frontend_client/src/**/*.vue"
     ],
-    "exclude": ["packages/frontend_prod/src/**/__tests__/*"],
+    "exclude": ["packages/frontend_client/src/**/__tests__/*"],
     "compilerOptions": {
         "composite": true,
         "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-
         "baseUrl": ".",
         "paths": {
-            "@/*": ["packages/frontend_prod/src/*"]
+            "@/*": ["packages/frontend_client/src/*"]
         }
     }
 }

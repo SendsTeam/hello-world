@@ -1,8 +1,8 @@
 {
-    "name": "frontend_prod",
+    "name": "@hello-world/client",
     "private": true,
     "version": "1.0.0",
-    "description": "hello-world prod",
+    "description": "hello-world client",
     "main": "src/main.ts",
     "scripts": {
         "dev": "vite --host --port=5000",
@@ -16,5 +16,8 @@
     },
     "keywords": [],
     "author": "",
-    "license": "ISC"
+    "license": "ISC",
+    "dependencies": {
+        "@hello-world/api": "workspace:^"
+    }
 }

@@ -13,11 +13,6 @@
         "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
         "format": "prettier --write src/"
     },
-    "workspaces": [
-        "packages/frontend_prod",
-        "packages/frontend_admin",
-        "packages/backend"
-    ],
     "dependencies": {
         "@amap/amap-jsapi-loader": "^1.0.1",
         "@amap/amap-jsapi-types": "^0.0.13",

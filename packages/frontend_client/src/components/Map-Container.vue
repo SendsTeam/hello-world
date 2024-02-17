@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, reactive, ref, watch, watchEffect } from 'vue'
+import { onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import CardModal from './card/Card-Modal.vue'
 import { useMapStore } from '@/stores/map'
 import type { Card } from '@/models/card'

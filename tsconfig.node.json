@@ -6,14 +6,13 @@
         "cypress.config.*",
         "nightwatch.conf.*",
         "playwright.config.*",
-        "packages/frontend_prod/vite.config.ts",
-        "packages/frontend_prod/vitest.config.ts"
+        "packages/frontend_client/vite.config.ts",
+        "packages/frontend_client/vitest.config.ts"
     ],
     "compilerOptions": {
         "composite": true,
         "noEmit": true,
         "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
-
         "module": "ESNext",
         "moduleResolution": "Bundler",
         "types": ["node"]
