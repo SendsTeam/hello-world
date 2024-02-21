@@ -113,6 +113,8 @@ importers:
 
   packages/client: {}
 
+  packages/community: {}
+
   packages/server/app:
     dependencies:
       elysia:
