@@ -9,8 +9,10 @@ export const useCardStore = defineStore('card-store', () => {
     const postedCards = ref<Card[]>([])
     const emptyCard: Card = {
         title: '',
+        subtitle: '',
         content: '',
-        position: [0, 0]
+        position: [0, 0],
+        imgSrc: ''
     }
     //当前展示的卡片
     const currentCard: Card = reactive(emptyCard)

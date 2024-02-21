@@ -1,20 +1,16 @@
 <template>
     <var-card
-        src="https://varlet.gitee.io/varlet-ui/cat.jpg"
-        :style="displayCardStyle"
+        :src="cardStore.currentCard.imgSrc"
         :title="cardStore.currentCard.title"
-        subtitle="Nker Ppe Suzz"
+        :subtitle="cardStore.currentCard.subtitle"
         :description="cardStore.currentCard.content"
+        :elevation="4"
     />
 </template>
 
 <script setup lang="ts">
 import { useCardStore } from '@/stores/card'
 const cardStore = useCardStore()
-const displayCardStyle = {
-    width: document.body.clientWidth > 400 ? '400px' : '80%',
-    padding: '10px'
-}
 </script>
 
 <style scoped></style>

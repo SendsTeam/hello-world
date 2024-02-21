@@ -1,7 +1,8 @@
 <template>
-    <var-paper :style="postCardStyle" :elevation="2">
+    <var-paper style="padding: 20px" :elevation="2">
         <var-space direction="column">
             <var-input v-model="cardTitle" placeholder="标题" />
+            <var-input v-model="cardSubTitle" placeholder="副标题" />
             <var-input v-model="cardContent" textarea placeholder="内容" />
             <var-space>
                 <var-button @click="postCard">发布卡片</var-button>
@@ -22,15 +23,11 @@ import { ref } from 'vue'
 const statusStore = useStatusStore()
 const cardStore = useCardStore()
 
-//Style
-const postCardStyle = {
-    width: document.body.clientWidth > 400 ? '400px' : '80%',
-    padding: '20px'
-}
 //发布卡片
 //#region
 const cardTitle = ref('')
 const cardContent = ref('')
+const cardSubTitle = ref('')
 const postCard = () => {
     if (!cardTitle.value) {
         Snackbar.error('卡片标题不能为空!')
@@ -39,8 +36,10 @@ const postCard = () => {
     } else {
         const newCard: Card = {
             title: cardTitle.value,
+            subtitle: cardSubTitle.value,
             content: cardContent.value,
-            position: [0, 0]
+            position: [0, 0],
+            imgSrc: ''
         }
         cardStore.postCard(newCard)
         Snackbar.success('发布成功!')
