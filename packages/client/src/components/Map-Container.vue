@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import type { Card } from '@/models/card'
 import { onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import CardModal from './card/Card-Modal.vue'
+import FabContainer from './Fab-Container.vue'
 import { useMapStore } from '@/stores/map'
-import type { Card } from '@/models/card'
 import { getRandomFloat } from '@/utils/index'
-import { NButton } from 'naive-ui'
 import { useCardStore } from '@/stores/card'
+import { useStatusStore } from '@/stores/status'
 
 //Props
 //#region
@@ -23,6 +24,12 @@ const mapStyle = {
     width,
     height
 }
+//#endregion
+
+//Store
+//#region
+const statusStore = useStatusStore()
+const cardStore = useCardStore()
 //#endregion
 
 //初始化地图
@@ -67,7 +74,7 @@ const currMarker = ref<AMap.Marker>()
 const posCount = ref(0)
 let watchPosId: number
 onMounted(() => {
-    //定时更新位置
+    //定时更新位置,确保currentPos存储的是经过转化后的正确坐标
     watchPosId = navigator.geolocation.watchPosition(
         async (pos) => {
             const center = await mapStore.fixPosition([pos.coords.longitude, pos.coords.latitude])
@@ -93,13 +100,11 @@ onUnmounted(() => {
 
 //生成卡片
 //#region
-const cardStore = useCardStore()
 const getRandomOffset = () => getRandomFloat(0.00001, 0.0001)
-const showDisplayModal = ref(false)
 const handleDisplayCard = (card: Card) => {
     cardStore.currentCard = card
-    showDisplayModal.value = true
-    showPostModal.value = false
+    statusStore.mapPageStatus.showDisplayModal = true
+    statusStore.mapPageStatus.showPostModal = false
 }
 //用watch监听定位成功后的pos并且初始化卡片
 //#region
@@ -123,51 +128,37 @@ watch(currentPos, () => {
 
 //同步cards的最新状态
 //#region
-//TODO 这里可能会有性能问题!
-watch(cardStore.cards, () => {
-    mapStore.clearMarkers()
-    cardStore.cards.forEach((card) => {
-        const lng = currentPos.longitude + getRandomOffset()
-        const lat = currentPos.latitude + getRandomOffset()
-        const pos: [number, number] = [lng, lat]
-        mapStore.newMarker(pos).on('click', () => {
-            handleDisplayCard(card)
-        })
-    })
-})
+watch(
+    () => cardStore.newCard,
+    (newCard) => {
+        if (newCard) {
+            const lng = currentPos.longitude + getRandomOffset()
+            const lat = currentPos.latitude + getRandomOffset()
+            const pos: [number, number] = [lng, lat]
+            mapStore.newMarker(pos).on('click', () => {
+                handleDisplayCard(newCard)
+            })
+        }
+    }
+)
 //#endregion
-
-//#endregion
-
-//发布卡片
-//#region
-const showPostModal = ref(false)
-const handlePostCard = () => {
-    showDisplayModal.value = false
-    showPostModal.value = true
-}
 
 //#endregion
 </script>
 
 <template>
-    <div class="tip">
+    <div id="meta">
         <div>{{ currentPos.longitude }} | {{ currentPos.latitude }}</div>
         <div>{{ currStatus }} {{ posCount }}</div>
-        <div>
-            <n-button @click="handlePostCard">点我发布!</n-button>
-        </div>
     </div>
-    <card-modal
-        v-model:show="showDisplayModal"
-        v-model:post="showPostModal"
-        :card="cardStore.currentCard"
-    />
+    <fab-container />
+    <card-modal />
+    <!-- 地图容器 -->
     <div ref="mapRef" :style="mapStyle"></div>
 </template>
 
 <style scoped>
-.tip {
+#meta {
     position: absolute;
     z-index: 10;
     top: 25px;

@@ -41,10 +41,11 @@ export const useMapStore = defineStore('map-store', () => {
         markers.value.forEach((marker) => {
             marker.clearEvents('click').destroy()
         })
+        markers.value = []
     }
     //#endregion
 
-    //修正坐标
+    //修正坐标:将当前坐标系的坐标转化为高德地图坐标系下的精准坐标
     //#region
     async function fixPosition(pos: [number, number]): Promise<[number, number]> {
         return new Promise((resolve, reject) => {

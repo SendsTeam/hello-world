@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { NMessageProvider } from 'naive-ui'
 </script>
 
 <template>
@@ -11,9 +10,7 @@ import { NMessageProvider } from 'naive-ui'
                 mode="out-in"
             >
                 <KeepAlive>
-                    <n-message-provider>
-                        <component :is="Component" />
-                    </n-message-provider>
+                    <component :is="Component" />
                 </KeepAlive>
             </Transition>
         </RouterView>
