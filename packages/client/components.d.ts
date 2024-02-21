@@ -15,7 +15,9 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     'Var-': typeof import('@varlet/ui')['_-Component']
+    VarBackTop: typeof import('@varlet/ui')['_BackTopComponent']
     VarButton: typeof import('@varlet/ui')['_ButtonComponent']
+    VarButtonGroup: typeof import('@varlet/ui')['_ButtonGroupComponent']
     VarCard: typeof import('@varlet/ui')['_CardComponent']
     VarDrag: typeof import('@varlet/ui')['_DragComponent']
     VarFab: typeof import('@varlet/ui')['_FabComponent']
@@ -29,5 +31,6 @@ declare module 'vue' {
     VarSpace: typeof import('@varlet/ui')['_SpaceComponent']
     VarSwipe: typeof import('@varlet/ui')['_SwipeComponent']
     VarSwipeItem: typeof import('@varlet/ui')['_SwipeItemComponent']
+    VarTooltip: typeof import('@varlet/ui')['_TooltipComponent']
   }
 }

@@ -29,6 +29,30 @@
                 closeable
             />
         </template>
+        <template #extra>
+            <var-space :size="[10, 10]">
+                
+                <var-button type="primary"> 拾取 </var-button>
+
+                <var-tooltip content="点赞" placement="top" trigger="hover">
+                    <var-button type="success" round>
+                        <var-icon name="thumb-up-outline" />
+                    </var-button>
+                </var-tooltip>
+
+                <var-tooltip content="收藏" placement="top" trigger="hover">
+                    <var-button type="info" round>
+                        <var-icon name="heart-outline" />
+                    </var-button>
+                </var-tooltip>
+
+                <var-tooltip content="举报" placement="top" trigger="hover">
+                    <var-button type="warning" round>
+                        <var-icon name="warning" />
+                    </var-button>
+                </var-tooltip>
+            </var-space>
+        </template>
     </var-card>
 </template>
 
