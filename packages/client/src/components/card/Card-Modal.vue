@@ -10,7 +10,6 @@ const popupStyle = {
     'background-color': 'transparent',
     'box-shadow': '0 0 0 0' //这里是为了覆盖varlet popup默认的elevation
 }
-
 </script>
 
 <template>

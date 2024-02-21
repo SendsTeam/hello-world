@@ -100,7 +100,7 @@ onUnmounted(() => {
 
 //生成卡片
 //#region
-const getRandomOffset = () => getRandomFloat(0.00001, 0.0001)
+const getRandomOffset = () => getRandomFloat(0.0001, 0.001)
 const handleDisplayCard = (card: Card) => {
     cardStore.currentCard = card
     statusStore.mapPageStatus.showDisplayModal = true
