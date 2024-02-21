@@ -4,7 +4,7 @@ import { onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import CardModal from './card/Card-Modal.vue'
 import FabContainer from './Fab-Container.vue'
 import { useMapStore } from '@/stores/map'
-import { getRandomFloat } from '@/utils/index'
+import { getRandomFloat } from '@hello-world/utils'
 import { useCardStore } from '@/stores/card'
 import { useStatusStore } from '@/stores/status'
 

@@ -14,6 +14,12 @@ importers:
       '@amap/amap-jsapi-types':
         specifier: ^0.0.13
         version: 0.0.13
+      '@hello-world/api':
+        specifier: workspace:^
+        version: link:packages/api
+      '@hello-world/utils':
+        specifier: workspace:^
+        version: link:packages/utils
       '@varlet/ui':
         specifier: ^3.0.2
         version: 3.0.2(vue@3.4.18)
@@ -105,27 +111,7 @@ importers:
 
   packages/api: {}
 
-  packages/backend/app:
-    dependencies:
-      elysia:
-        specifier: latest
-        version: 0.8.17(typescript@5.3.3)
-    devDependencies:
-      bun-types:
-        specifier: latest
-        version: 1.0.27
-
-  packages/client:
-    dependencies:
-      '@hello-world/api':
-        specifier: workspace:^
-        version: link:../api
-
-  packages/frontend_client:
-    dependencies:
-      '@hello-world/api':
-        specifier: workspace:^
-        version: link:../api
+  packages/client: {}
 
   packages/server/app:
     dependencies:
@@ -136,6 +122,8 @@ importers:
       bun-types:
         specifier: latest
         version: 1.0.28
+
+  packages/utils: {}
 
 packages:
 
@@ -1614,13 +1602,6 @@ packages:
       electron-to-chromium: 1.4.665
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.22.3)
-    dev: true
-
-  /bun-types@1.0.27:
-    resolution: {integrity: sha512-fwaJ3Ey6InD4nAkUd+AwzHDmxGdWWRy/SWh0QQEw7QF/ABnoqSv+iQrA5tIK4TyUyR/V9446G+w53+sOmJOJyA==}
-    dependencies:
-      '@types/node': 20.11.17
-      '@types/ws': 8.5.10
     dev: true
 
   /bun-types@1.0.28:

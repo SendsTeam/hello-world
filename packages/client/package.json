@@ -16,8 +16,5 @@
     },
     "keywords": [],
     "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "@hello-world/api": "workspace:^"
-    }
+    "license": "ISC"
 }

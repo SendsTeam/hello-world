@@ -12,7 +12,7 @@ export const useCardStore = defineStore('card-store', () => {
         subtitle: '',
         content: '',
         position: [0, 0],
-        imgSrc: ''
+        imgs: []
     }
     //当前展示的卡片
     const currentCard: Card = reactive(emptyCard)
@@ -27,7 +27,7 @@ export const useCardStore = defineStore('card-store', () => {
         newCard.value = card //更新 newCard的引用,触发watch
     }
     //TODO 使用ws同步卡片状态:新卡片/删除卡片
-    function syncCardStatus() {}
+    // function syncCardStatus() {}
 
     return {
         cards,

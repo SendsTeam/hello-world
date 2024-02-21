@@ -7,15 +7,26 @@
         :elevation="4"
     >
         <template #image>
+            <var-swipe
+                v-if="cardStore.currentCard.imgs.length > 1"
+                navigation="hover"
+                @change="(index) => (previewInitialIndex = index)"
+            >
+                <var-swipe-item v-for="(imgSrc, index) in cardStore.currentCard.imgs" :key="index">
+                    <var-image fit="contain" @click="showImgPreview = true" :src="imgSrc" />
+                </var-swipe-item>
+            </var-swipe>
             <var-image
+                v-else-if="cardStore.currentCard.imgs.length === 1"
                 fit="contain"
                 @click="showImgPreview = true"
-                :src="cardStore.currentCard.imgSrc"
+                :src="cardStore.currentCard.imgs[0]"
             />
             <var-image-preview
                 v-model:show="showImgPreview"
+                :initial-index="previewInitialIndex"
+                :images="cardStore.currentCard.imgs"
                 closeable
-                :images="[cardStore.currentCard.imgSrc]"
             />
         </template>
     </var-card>
@@ -27,10 +38,14 @@ import { ref } from 'vue'
 const cardStore = useCardStore()
 const cardStyle = {
     'max-height': document.body.clientHeight * 0.7 + 'px',
-    'overflow-y': 'scroll'
+    'overflow-y': 'auto'
 }
 
+//图片预览
+//#region
 const showImgPreview = ref(false)
+const previewInitialIndex = ref(0)
+//#endregion
 </script>
 
 <style scoped></style>

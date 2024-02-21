@@ -16,6 +16,8 @@
     "dependencies": {
         "@amap/amap-jsapi-loader": "^1.0.1",
         "@amap/amap-jsapi-types": "^0.0.13",
+        "@hello-world/api": "workspace:^",
+        "@hello-world/utils": "workspace:^",
         "@varlet/ui": "^3.0.2",
         "animate.css": "^4.1.1",
         "axios": "^1.6.7",

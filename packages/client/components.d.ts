@@ -27,5 +27,7 @@ declare module 'vue' {
     VarPaper: typeof import('@varlet/ui')['_PaperComponent']
     VarPopup: typeof import('@varlet/ui')['_PopupComponent']
     VarSpace: typeof import('@varlet/ui')['_SpaceComponent']
+    VarSwipe: typeof import('@varlet/ui')['_SwipeComponent']
+    VarSwipeItem: typeof import('@varlet/ui')['_SwipeItemComponent']
   }
 }

@@ -3,5 +3,5 @@ export type Card = {
     subtitle: string
     content: string
     position: [number, number]
-    imgSrc: string
+    imgs: string[]
 }
