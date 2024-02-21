@@ -38,25 +38,24 @@ const mapRef = ref<HTMLDivElement | null>(null)
 const mapStore = useMapStore()
 await mapStore.initMap()
 onMounted(() => {
-    if (!mapRef.value) return
+    if (!mapRef.value) return console.log('空地图容器引用!')
     //根据当前位置初始化地图
     navigator.geolocation.getCurrentPosition(
         async (pos) => {
-            //先修正位置
-            const center: [number, number] = await mapStore.fixPosition([
-                pos.coords.longitude,
-                pos.coords.latitude
-            ])
+            const center: [number, number] = import.meta.env.DEV
+                ? [pos.coords.longitude, pos.coords.latitude]
+                : await mapStore.fixPosition([pos.coords.longitude, pos.coords.latitude])
+
             mapStore.newMap(mapRef.value!, {
                 viewMode: '2D',
                 center,
                 zoom: 20
             })
-            currMarker.value = mapStore.newMarker(center)
-            currStatus.value = '定位成功'
+            updateCurrentPos(center)
+            currentStatus.value = '定位成功'
         },
         (err) => {
-            currStatus.value = '定位失败'
+            currentStatus.value = '定位失败'
             console.log(err)
         }
     )
@@ -69,22 +68,33 @@ const currentPos = reactive({
     longitude: 0,
     latitude: 0
 })
-const currStatus = ref('')
-const currMarker = ref<AMap.Marker>()
-const posCount = ref(0)
+const updateCurrentPos = (newPos: [number, number]) => {
+    //更新位置,更新marker
+    currentPos.longitude = newPos[0]
+    currentPos.latitude = newPos[1]
+    if (!userMarker.value) {
+        userMarker.value = mapStore.newMarker(newPos)
+    } else {
+        userMarker.value.setPosition(newPos) //更新用户位置
+    }
+}
+const currentStatus = ref('')
+const userMarker = ref<AMap.Marker | null>(null) //代表用户位置的marker
+const posCount = ref(0) //定位次数统计
 let watchPosId: number
 onMounted(() => {
     //定时更新位置,确保currentPos存储的是经过转化后的正确坐标
     watchPosId = navigator.geolocation.watchPosition(
         async (pos) => {
-            const center = await mapStore.fixPosition([pos.coords.longitude, pos.coords.latitude])
-            currentPos.longitude = center[0]
-            currentPos.latitude = center[1]
-            currMarker.value?.setPosition(center)
+            const center: [number, number] = import.meta.env.DEV
+                ? [pos.coords.longitude, pos.coords.latitude]
+                : await mapStore.fixPosition([pos.coords.longitude, pos.coords.latitude])
+
+            updateCurrentPos(center)
             posCount.value++
         },
         (err) => {
-            currStatus.value = err.message
+            currentStatus.value = err.message
         },
         {
             enableHighAccuracy: true,
@@ -149,7 +159,7 @@ watch(
 <template>
     <div id="meta">
         <div>{{ currentPos.longitude }} | {{ currentPos.latitude }}</div>
-        <div>{{ currStatus }} {{ posCount }}</div>
+        <div>{{ currentStatus }} {{ posCount }}</div>
     </div>
     <fab-container />
     <card-modal />

@@ -20,6 +20,8 @@ declare module 'vue' {
     VarDrag: typeof import('@varlet/ui')['_DragComponent']
     VarFab: typeof import('@varlet/ui')['_FabComponent']
     VarIcon: typeof import('@varlet/ui')['_IconComponent']
+    VarImage: typeof import('@varlet/ui')['_ImageComponent']
+    VarImagePreview: typeof import('@varlet/ui')['_ImagePreviewComponent']
     VarInput: typeof import('@varlet/ui')['_InputComponent']
     VarOverlay: typeof import('@varlet/ui')['_OverlayComponent']
     VarPaper: typeof import('@varlet/ui')['_PaperComponent']
