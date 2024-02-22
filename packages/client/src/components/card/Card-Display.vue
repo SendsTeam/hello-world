@@ -1,5 +1,6 @@
 <template>
     <var-card
+        class="better-scroll"
         :style="cardStyle"
         :title="cardStore.currentCard.title"
         :subtitle="cardStore.currentCard.subtitle"
@@ -31,7 +32,6 @@
         </template>
         <template #extra>
             <var-space :size="[10, 10]">
-                
                 <var-button type="primary"> 拾取 </var-button>
 
                 <var-tooltip content="点赞" placement="top" trigger="hover">
@@ -61,8 +61,7 @@ import { useCardStore } from '@/stores/card'
 import { ref } from 'vue'
 const cardStore = useCardStore()
 const cardStyle = {
-    'max-height': document.body.clientHeight * 0.7 + 'px',
-    'overflow-y': 'auto'
+    'max-height': document.body.clientHeight * 0.7 + 'px'
 }
 
 //图片预览
@@ -72,4 +71,27 @@ const previewInitialIndex = ref(0)
 //#endregion
 </script>
 
-<style scoped></style>
+<style scoped>
+.better-scroll {
+    overflow-y: auto;
+}
+.better-scroll::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+.better-scroll::-webkit-scrollbar-track {
+    background: var(--color-body);
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+.better-scroll::-webkit-scrollbar-thumb {
+    background: #e0dfdf;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+.better-scroll::-webkit-scrollbar-thumb:hover {
+    background: #cbcbcb;
+}
+</style>
