@@ -111,9 +111,15 @@ importers:
 
   packages/api: {}
 
-  packages/client: {}
+  packages/client:
+    dependencies:
+      '@hello-world/hooks':
+        specifier: workspace:^
+        version: link:../hooks
 
   packages/community: {}
+
+  packages/hooks: {}
 
   packages/server/app:
     dependencies:
