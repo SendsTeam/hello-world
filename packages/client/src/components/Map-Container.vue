@@ -4,7 +4,7 @@ import { onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import CardModal from './card/Card-Modal.vue'
 import FabContainer from './Fab-Container.vue'
 import { useMapStore } from '@/stores/map'
-import { getRandomFloat } from '@hello-world/utils'
+import { getRandomFloat, wgs84togcj02 } from '@hello-world/utils'
 import { useCardStore } from '@/stores/card'
 import { useStatusStore } from '@/stores/status'
 
@@ -42,10 +42,7 @@ onMounted(() => {
     //根据当前位置初始化地图
     navigator.geolocation.getCurrentPosition(
         async (pos) => {
-            const center: [number, number] = import.meta.env.DEV
-                ? [pos.coords.longitude, pos.coords.latitude]
-                : await mapStore.fixPosition([pos.coords.longitude, pos.coords.latitude])
-
+            const center: [number, number] = wgs84togcj02(pos.coords.longitude, pos.coords.latitude)
             mapStore.newMap(mapRef.value!, {
                 viewMode: '2D',
                 center,
@@ -86,10 +83,7 @@ onMounted(() => {
     //定时更新位置,确保currentPos存储的是经过转化后的正确坐标
     watchPosId = navigator.geolocation.watchPosition(
         async (pos) => {
-            const center: [number, number] = import.meta.env.DEV
-                ? [pos.coords.longitude, pos.coords.latitude]
-                : await mapStore.fixPosition([pos.coords.longitude, pos.coords.latitude])
-
+            const center: [number, number] = wgs84togcj02(pos.coords.longitude, pos.coords.latitude)
             updateCurrentPos(center)
             posCount.value++
         },
