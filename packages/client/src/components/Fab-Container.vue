@@ -25,7 +25,6 @@ const statusStore = useStatusStore()
 
 //Handler
 const handlePostCard = () => {
-    statusStore.mapPageStatus.showDisplayModal = false
-    statusStore.mapPageStatus.showPostModal = true
+    statusStore.mapPageStatus.openPostModal()
 }
 </script>

@@ -107,8 +107,7 @@ onUnmounted(() => {
 const getRandomOffset = () => getRandomFloat(0.0001, 0.001)
 const handleDisplayCard = (card: Card) => {
     cardStore.currentCard = card
-    statusStore.mapPageStatus.showDisplayModal = true
-    statusStore.mapPageStatus.showPostModal = false
+    statusStore.mapPageStatus.openDisplayModal()
 }
 //用watch监听定位成功后的pos并且初始化卡片
 //#region

@@ -1,7 +1,7 @@
 <template>
     <var-card
         class="better-scroll"
-        :style="cardStyle"
+        :style="displayCardStyle"
         :title="cardStore.currentCard.title"
         :subtitle="cardStore.currentCard.subtitle"
         :description="cardStore.currentCard.content"
@@ -28,23 +28,21 @@
             <var-space :size="[10, 10]">
                 <var-button type="primary"> 拾取 </var-button>
 
-                <var-tooltip content="点赞" placement="top" trigger="hover">
-                    <var-button type="success" round>
-                        <var-icon name="thumb-up-outline" />
-                    </var-button>
-                </var-tooltip>
+                <var-button type="success" round>
+                    <var-icon :name="agreeIconName" :transition="150" @click="toggleAgreeIcon" />
+                </var-button>
 
-                <var-tooltip content="收藏" placement="top" trigger="hover">
-                    <var-button type="info" round>
-                        <var-icon name="heart-outline" />
-                    </var-button>
-                </var-tooltip>
+                <var-button type="info" round>
+                    <var-icon
+                        :name="favoriteIconName"
+                        :transition="150"
+                        @click="toggleFavoriteIcon"
+                    />
+                </var-button>
 
-                <var-tooltip content="举报" placement="top" trigger="hover">
-                    <var-button type="warning" round>
-                        <var-icon name="warning" />
-                    </var-button>
-                </var-tooltip>
+                <var-button type="warning" round>
+                    <var-icon name="warning" />
+                </var-button>
             </var-space>
         </template>
     </var-card>
@@ -55,7 +53,7 @@ import { useCardStore } from '@/stores/card'
 import { ImagePreview } from '@varlet/ui'
 import { ref } from 'vue'
 const cardStore = useCardStore()
-const cardStyle = {
+const displayCardStyle = {
     'max-height': document.body.clientHeight * 0.7 + 'px'
 }
 
@@ -69,6 +67,33 @@ const preview = () => {
     })
 }
 const previewInitialIndex = ref(0)
+//#endregion
+
+//底部交互栏
+//#region
+
+//图标切换过渡
+//#region
+const agreeIconName = ref<'thumb-up-outline' | 'thumb-up'>('thumb-up-outline')
+const toggleAgreeIcon = () => {
+    if (agreeIconName.value === 'thumb-up') {
+        agreeIconName.value = 'thumb-up-outline'
+    } else {
+        agreeIconName.value = 'thumb-up'
+    }
+}
+
+const favoriteIconName = ref<'heart-outline' | 'heart'>('heart-outline')
+const toggleFavoriteIcon = () => {
+    if (favoriteIconName.value === 'heart') {
+        favoriteIconName.value = 'heart-outline'
+    } else {
+        favoriteIconName.value = 'heart'
+    }
+}
+
+//#endregion
+
 //#endregion
 </script>
 
