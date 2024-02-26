@@ -9,6 +9,7 @@
         <var-button class="action" type="warning" round>
             <var-icon name="bell" />
         </var-button>
+
         <var-button class="action" type="danger" round>
             <var-icon name="delete" />
         </var-button>
@@ -22,7 +23,6 @@ const direction = ref<'top' | 'bottom' | 'right' | 'left'>('top')
 
 //Store
 const statusStore = useStatusStore()
-
 //Handler
 const handlePostCard = () => {
     statusStore.mapPageStatus.openPostModal()

@@ -1,4 +1,5 @@
 <template>
+    <music-player />
     <var-card
         class="better-scroll"
         :style="displayCardStyle"
@@ -49,9 +50,11 @@
 </template>
 
 <script setup lang="ts">
+import MusicPlayer from '@/components/Music-Player.vue'
 import { useCardStore } from '@/stores/card'
 import { ImagePreview } from '@varlet/ui'
 import { ref } from 'vue'
+
 const cardStore = useCardStore()
 const displayCardStyle = {
     'max-height': document.body.clientHeight * 0.7 + 'px'
@@ -91,6 +94,8 @@ const toggleFavoriteIcon = () => {
         favoriteIconName.value = 'heart'
     }
 }
+
+//#endregion
 
 //#endregion
 
