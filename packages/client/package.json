@@ -18,6 +18,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@hello-world/api": "workspace:^",
         "@hello-world/hooks": "workspace:^"
     }
 }

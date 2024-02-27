@@ -33,7 +33,6 @@ export const useMapStore = defineStore('map-store', () => {
             position,
             zooms: [15, 20]
         })
-        console.log(marker.amapId)
         marker.setMap(currentMap.value)
         markers.value.push(marker)
         return marker

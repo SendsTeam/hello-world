@@ -113,6 +113,9 @@ importers:
 
   packages/client:
     dependencies:
+      '@hello-world/api':
+        specifier: workspace:^
+        version: link:../api
       '@hello-world/hooks':
         specifier: workspace:^
         version: link:../hooks

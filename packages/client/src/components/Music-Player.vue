@@ -1,8 +1,8 @@
 <template>
-    <div id="music-player-container">
+    <div v-show="cardStore.currentCard.music" id="music-player-container">
         <var-avatar
             :class="animClass"
-            src="https://p2.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg"
+            :src="cardStore.currentCard.imgs[0]"
             @click="() => toggle()"
         />
     </div>
@@ -11,15 +11,24 @@
 <script setup lang="ts">
 import { useAudioStore } from '@/stores/music'
 import { useCardStore } from '@/stores/card'
+import { getMusicUrl } from '@hello-world/api'
 import { computed } from 'vue'
+import { watchEffect } from 'vue'
 
 const audioStore = useAudioStore()
 const cardStore = useCardStore()
-audioStore.load(
-    'https://m701.music.126.net/20240226232447/b03e906f437999a0eb794cf89f476e22/jdymusic/obj/wo3DlMOGwrbDjj7DisKw/33793290472/eb63/0e36/24c5/bef170bf6657bbd6efb4718050ee4206.mp3'
-)
-
-const toggle = () => {
+watchEffect(async () => {
+    if (cardStore.currentCard.music) {
+        const url = await getMusicUrl(
+            cardStore.currentCard.music.id,
+            cardStore.currentCard.music.level
+        )
+        if (url !== audioStore.audio.src) {
+            audioStore.load(url)
+        }
+    }
+})
+function toggle() {
     audioStore.toggle()
 }
 const animClass = computed(() => {

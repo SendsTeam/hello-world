@@ -14,6 +14,7 @@
 </template>
 
 <script setup lang="ts">
+import type { Card } from '@/models/card'
 import { useCardStore } from '@/stores/card'
 import { useStatusStore } from '@/stores/status'
 import { Snackbar } from '@varlet/ui'
@@ -31,12 +32,16 @@ const postCardStyle = {
 
 //卡片交互
 //#region
-const emptyCard = {
+const emptyCard: Card = {
     title: '',
     subtitle: '',
     content: '',
-    position: [0, 0] as [number, number],
-    imgs: [] as string[]
+    position: [0, 0],
+    imgs: [],
+    music: {
+        id: '',
+        level: ''
+    }
 }
 const newCard = ref({ ...emptyCard })
 const postCard = () => {

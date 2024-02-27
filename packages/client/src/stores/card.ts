@@ -12,7 +12,11 @@ export const useCardStore = defineStore('card-store', () => {
         subtitle: '',
         content: '',
         position: [0, 0],
-        imgs: []
+        imgs: [],
+        music: {
+            id: '',
+            level: ''
+        }
     }
     //当前展示的卡片
     const currentCard: Card = reactive(emptyCard)
