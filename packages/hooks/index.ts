@@ -20,3 +20,24 @@ export function useFullscreen() {
         exitfullscreen
     }
 }
+
+export function useLock<T extends () => void>(fn: T, once: boolean = false) {
+    let isLocked = false
+    const locked = () => {
+        if (!isLocked) {
+            fn()
+            once && lock()
+        }
+    }
+    const lock = () => {
+        isLocked = true
+    }
+    const unlock = () => {
+        isLocked = false
+    }
+    return {
+        locked,
+        lock,
+        unlock
+    }
+}

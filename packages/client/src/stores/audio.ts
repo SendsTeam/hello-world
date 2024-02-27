@@ -2,27 +2,24 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useAudioStore = defineStore('audio-store', () => {
-    const audio = ref(new Audio(''))
+    const preAudio = new Audio('')
     const nextAudio = new Audio('') //作为缓存
-    audio.value.loop = true
+    const audio = ref(preAudio)
+    preAudio.loop = true
     nextAudio.loop = true
     const isInit = ref(false)
     const isPaused = ref(true)
+    const loadTarget = ref<'pre' | 'next'>('pre') //一开始指向pre
 
     // 要确保链接是https的,不然无法加载
     function load(src: string) {
-        audio.value.src = src
         isInit.value = true
-    }
-
-    //使用缓存
-    function useCache() {
-        stop()
-        audio.value = nextAudio
-    }
-
-    function loadCache(src: string) {
-        nextAudio.src = src
+        if (loadTarget.value === 'pre') {
+            audio.value = preAudio
+        } else {
+            audio.value = nextAudio
+        }
+        audio.value.src = src
     }
 
     async function swap(nextSrc: string) {
@@ -32,30 +29,30 @@ export const useAudioStore = defineStore('audio-store', () => {
         await play()
     }
 
-    async function play() {
+    async function play(target: HTMLAudioElement = audio.value) {
         if (!isInit.value) return
-        await audio.value.play()
+        await target.play()
         isPaused.value = false
     }
 
-    function pause() {
+    function pause(target: HTMLAudioElement = audio.value) {
         if (!isInit.value) return
-        audio.value.pause()
+        target.pause()
         isPaused.value = true
     }
 
-    function stop() {
+    function stop(target: HTMLAudioElement = audio.value) {
         if (!isInit.value) return
-        audio.value.pause()
-        audio.value.currentTime = 0
+        target.pause()
+        target.currentTime = 0
         isPaused.value = true
     }
 
-    async function toggle() {
-        if (audio.value.paused) {
-            await play()
+    async function toggle(target: HTMLAudioElement = audio.value) {
+        if (target.paused) {
+            await play(target)
         } else {
-            pause()
+            pause(target)
         }
     }
 
@@ -66,11 +63,11 @@ export const useAudioStore = defineStore('audio-store', () => {
         stop,
         toggle,
         swap,
-        useCache,
-        loadCache,
         isPaused,
         isInit,
+        loadTarget,
         audio,
-        nextAudio
+        nextAudio,
+        preAudio
     }
 })

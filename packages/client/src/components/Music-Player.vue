@@ -9,27 +9,42 @@
 </template>
 
 <script setup lang="ts">
-import { useAudioStore } from '@/stores/music'
+import { useAudioStore } from '@/stores/audio'
 import { useCardStore } from '@/stores/card'
 import { getMusicUrl } from '@hello-world/api'
 import { computed } from 'vue'
 import { watchEffect } from 'vue'
+import { useLock } from '@hello-world/hooks'
 
 const audioStore = useAudioStore()
 const cardStore = useCardStore()
+
 watchEffect(async () => {
     if (cardStore.currentCard.music) {
         const url = await getMusicUrl(
             cardStore.currentCard.music.id,
             cardStore.currentCard.music.level
         )
+        //说明是不一样的两首bgm
+        locked()
         if (url !== audioStore.audio.src) {
             audioStore.load(url)
         }
     }
 })
+
+const { locked, unlock } = useLock(
+    () => (audioStore.loadTarget = audioStore.loadTarget === 'pre' ? 'next' : 'pre'),
+    true
+)
 function toggle() {
+    if (audioStore.loadTarget === 'pre') {
+        audioStore.stop(audioStore.nextAudio)
+    } else {
+        audioStore.stop(audioStore.preAudio)
+    }
     audioStore.toggle()
+    unlock()
 }
 const animClass = computed(() => {
     return audioStore.isPaused ? '' : 'music-player-anim'
