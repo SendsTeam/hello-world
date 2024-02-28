@@ -22,7 +22,7 @@ export function useFullscreen() {
 }
 
 export function useLock<T extends () => void>(fn: T, once: boolean = false) {
-    let isLocked = false
+    let isLocked = true
     const locked = () => {
         if (!isLocked) {
             fn()

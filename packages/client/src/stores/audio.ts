@@ -9,7 +9,7 @@ export const useAudioStore = defineStore('audio-store', () => {
     nextAudio.loop = true
     type AudioTarget = 'pre' | 'next'
     const currentAudio = reactive({
-        target: 'pre' as AudioTarget | '',
+        target: 'pre' as AudioTarget | '', //引用的sourceTarget
         source: preAudio,
         paused: true
     })
@@ -25,8 +25,10 @@ export const useAudioStore = defineStore('audio-store', () => {
 
     async function play(target?: AudioTarget) {
         if (target === 'pre') {
+            stop('next')
             await preAudio.play()
         } else if (target === 'next') {
+            stop('pre')
             await nextAudio.play()
         } else {
             await currentAudio.source.play()

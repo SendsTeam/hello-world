@@ -39,17 +39,15 @@ watchEffect(async () => {
             cardStore.currentCard.music.id,
             cardStore.currentCard.music.level
         )
-        //说明是不一样的两首bgm
         locked()
-        if (url !== audioStore.currentAudio.source.src) {
-            audioStore.load(url)
-        }
+        audioStore.load(url)
     }
 })
-const { locked, unlock } = useLock(
-    () => (audioStore.loadTarget = audioStore.loadTarget === 'pre' ? 'next' : 'pre'),
-    true
-)
+const changeLoadTarget = () => {
+    audioStore.loadTarget = audioStore.loadTarget === 'pre' ? 'next' : 'pre'
+}
+const { locked, unlock } = useLock(changeLoadTarget, true)
+
 function toggle() {
     if (audioStore.loadTarget === 'pre') {
         audioStore.stop('next')
