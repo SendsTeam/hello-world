@@ -1,58 +1,70 @@
 import { defineStore } from 'pinia'
+import { reactive } from 'vue'
 import { ref } from 'vue'
 
 export const useAudioStore = defineStore('audio-store', () => {
     const preAudio = new Audio('')
-    const nextAudio = new Audio('') //作为缓存
-    const audio = ref(preAudio)
+    const nextAudio = new Audio('')
     preAudio.loop = true
     nextAudio.loop = true
-    const isInit = ref(false)
-    const isPaused = ref(true)
-    const loadTarget = ref<'pre' | 'next'>('pre') //一开始指向pre
+    type AudioTarget = 'pre' | 'next'
+    const currentAudio = reactive({
+        target: 'pre' as AudioTarget | '',
+        source: preAudio,
+        paused: true
+    })
+    //即将装载的目标
+    const loadTarget = ref<AudioTarget>('pre') //一开始指向pre
 
     // 要确保链接是https的,不然无法加载
-    function load(src: string) {
-        isInit.value = true
-        if (loadTarget.value === 'pre') {
-            audio.value = preAudio
+    function load(src: string, target: AudioTarget = loadTarget.value) {
+        currentAudio.source = target === 'pre' ? preAudio : nextAudio
+        currentAudio.source.src = src
+        currentAudio.target = target
+    }
+
+    async function play(target?: AudioTarget) {
+        if (target === 'pre') {
+            await preAudio.play()
+        } else if (target === 'next') {
+            await nextAudio.play()
         } else {
-            audio.value = nextAudio
+            await currentAudio.source.play()
+            currentAudio.paused = false
         }
-        audio.value.src = src
     }
 
-    async function swap(nextSrc: string) {
-        if (!isInit.value) return
-        stop()
-        load(nextSrc)
-        await play()
-    }
-
-    async function play(target: HTMLAudioElement = audio.value) {
-        if (!isInit.value) return
-        await target.play()
-        isPaused.value = false
-    }
-
-    function pause(target: HTMLAudioElement = audio.value) {
-        if (!isInit.value) return
-        target.pause()
-        isPaused.value = true
-    }
-
-    function stop(target: HTMLAudioElement = audio.value) {
-        if (!isInit.value) return
-        target.pause()
-        target.currentTime = 0
-        isPaused.value = true
-    }
-
-    async function toggle(target: HTMLAudioElement = audio.value) {
-        if (target.paused) {
-            await play(target)
+    function pause(target?: AudioTarget) {
+        if (target === 'pre') {
+            preAudio.pause()
+        } else if (target === 'next') {
+            nextAudio.pause()
         } else {
-            pause(target)
+            currentAudio.source.pause()
+            currentAudio.paused = true
+        }
+    }
+
+    function stop(target?: AudioTarget) {
+        if (target === 'pre') {
+            preAudio.pause()
+            preAudio.currentTime = 0
+        } else if (target === 'next') {
+            nextAudio.pause()
+            nextAudio.currentTime = 0
+        } else {
+            currentAudio.source.pause()
+            currentAudio.source.currentTime = 0
+        }
+    }
+
+    async function toggle(target?: AudioTarget) {
+        if (target === 'pre') {
+            preAudio.paused ? play(target) : pause(target)
+        } else if (target === 'next') {
+            nextAudio.paused ? play(target) : pause(target)
+        } else {
+            currentAudio.paused ? play() : pause()
         }
     }
 
@@ -62,11 +74,8 @@ export const useAudioStore = defineStore('audio-store', () => {
         pause,
         stop,
         toggle,
-        swap,
-        isPaused,
-        isInit,
         loadTarget,
-        audio,
+        currentAudio,
         nextAudio,
         preAudio
     }
