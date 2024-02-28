@@ -1,25 +1,57 @@
 <template>
     <div v-show="cardStore.currentCard.music" id="music-player-container">
-        <var-space>
-            <var-avatar
-                :class="anim"
-                :src="cardStore.currentCard.imgs[0]"
-                @click="() => toggle()"
-            />
-        </var-space>
+        <var-fab
+            v-model:active="activeFab"
+            :style="playerStyle"
+            type="primary"
+            :teleport="false"
+            direction="right"
+        >
+            <template #trigger>
+                <var-avatar
+                    :class="anim"
+                    :src="cardStore.currentCard.imgs[0]"
+                    @click="() => toggle()"
+                />
+            </template>
+            <var-button type="primary">
+                <!-- 复制歌名 -->
+                <var-icon name="content-copy" />
+            </var-button>
+            <var-button type="primary">
+                <!-- 固定音乐 -->
+                <var-icon name="pin-outline" />
+            </var-button>
+            <var-button type="primary" @click="replayMusic">
+                <!-- 重新播放 -->
+                <var-icon name="refresh" />
+            </var-button>
+        </var-fab>
     </div>
 </template>
 
 <script setup lang="ts">
 import { useCardStore } from '@/stores/card'
+import { useStatusStore } from '@/stores/status'
 import { getMusicUrl } from '@hello-world/api'
+import { watch } from 'vue'
 import { reactive } from 'vue'
 import { watchEffect } from 'vue'
 import { ref } from 'vue'
 
 const cardStore = useCardStore()
+const statusStore = useStatusStore()
 
-//触发音频
+//魔改样式
+const playerStyle = {
+    right: 0,
+    bottom: 0,
+    position: 'relative',
+    cursor: 'pointer'
+}
+
+//更新音频
+//#region
 const newUrl = ref('')
 watchEffect(async () => {
     if (cardStore.currentCard.music) {
@@ -30,7 +62,10 @@ watchEffect(async () => {
         newUrl.value = url
     }
 })
+//#endregion
 
+//音频控制
+//#region
 const audio = new Audio()
 
 const status = ref<'play' | 'pause' | 'stop'>('stop')
@@ -38,6 +73,16 @@ const anim = reactive({
     'rotate-anim': false,
     'pause-anim': false
 })
+
+//关闭卡片后停止bgm
+watch(
+    () => statusStore.mapPageStatus.showDisplayModal,
+    (v) => {
+        if (!v) {
+            stop()
+        }
+    }
+)
 
 function play() {
     audio.play()
@@ -53,6 +98,7 @@ function pause() {
 }
 
 function stop() {
+    audio.pause()
     audio.currentTime = 0
     status.value = 'stop'
     anim['pause-anim'] = false
@@ -68,6 +114,20 @@ async function toggle() {
         audio.paused ? play() : pause()
     }
 }
+//#endregion
+
+//音频交互
+//#region
+const activeFab = ref(false)
+const copyMusicName = () => {}
+const fixMusic = () => {}
+const replayMusic = () => {
+    setTimeout(() => {
+        stop()
+        play()
+    }, 1000)
+}
+//#endregion
 </script>
 
 <style scoped>
@@ -75,7 +135,6 @@ async function toggle() {
     padding: 10px;
     display: flex;
 }
-
 .rotate-anim {
     animation: rotate 5s linear 0s infinite normal;
 }
