@@ -2,13 +2,7 @@
     <div v-show="cardStore.currentCard.music" id="music-player-container">
         <var-space>
             <var-avatar
-                v-show="lastMusicIcon && lastMusicIcon !== cardStore.currentCard.imgs[0]"
-                :class="lastAnimClass"
-                :src="lastMusicIcon"
-                @click="() => toggle()"
-            />
-            <var-avatar
-                :class="currentAnimClass"
+                :class="anim"
                 :src="cardStore.currentCard.imgs[0]"
                 @click="() => toggle()"
             />
@@ -17,55 +11,63 @@
 </template>
 
 <script setup lang="ts">
-import { useAudioStore } from '@/stores/audio'
 import { useCardStore } from '@/stores/card'
 import { getMusicUrl } from '@hello-world/api'
-import { computed } from 'vue'
+import { reactive } from 'vue'
 import { watchEffect } from 'vue'
-import { useLock } from '@hello-world/hooks'
 import { ref } from 'vue'
 
-//Store
-const audioStore = useAudioStore()
 const cardStore = useCardStore()
 
-//ICONS
-const lastMusicIcon = ref('')
-
 //触发音频
+const newUrl = ref('')
 watchEffect(async () => {
     if (cardStore.currentCard.music) {
         const url = await getMusicUrl(
             cardStore.currentCard.music.id,
             cardStore.currentCard.music.level
         )
-        locked()
-        audioStore.load(url)
+        newUrl.value = url
     }
 })
-const changeLoadTarget = () => {
-    audioStore.loadTarget = audioStore.loadTarget === 'pre' ? 'next' : 'pre'
-}
-const { locked, unlock } = useLock(changeLoadTarget, true)
 
-function toggle() {
-    if (audioStore.loadTarget === 'pre') {
-        audioStore.stop('next')
+const audio = new Audio()
+
+const status = ref<'play' | 'pause' | 'stop'>('stop')
+const anim = reactive({
+    'rotate-anim': false,
+    'pause-anim': false
+})
+
+function play() {
+    audio.play()
+    status.value = 'play'
+    anim['rotate-anim'] = true
+    anim['pause-anim'] = false
+}
+
+function pause() {
+    audio.pause()
+    status.value = 'pause'
+    anim['pause-anim'] = true
+}
+
+function stop() {
+    audio.currentTime = 0
+    status.value = 'stop'
+    anim['pause-anim'] = false
+    anim['rotate-anim'] = false
+}
+
+//注意点击后才加载
+async function toggle() {
+    if (audio.src === '' || audio.src !== newUrl.value) {
+        audio.src = newUrl.value
+        return play()
     } else {
-        audioStore.stop('pre')
+        audio.paused ? play() : pause()
     }
-    lastMusicIcon.value = cardStore.currentCard.imgs[0]
-    audioStore.toggle()
-    unlock()
 }
-
-//动画class
-const lastAnimClass = computed(() => {
-    return audioStore.currentAudio.paused ? '' : 'rotate-anim'
-})
-const currentAnimClass = computed(() => {
-    return audioStore.currentAudio.paused ? '' : 'rotate-anim'
-})
 </script>
 
 <style scoped>
@@ -73,12 +75,15 @@ const currentAnimClass = computed(() => {
     padding: 10px;
     display: flex;
 }
+
 .rotate-anim {
-    animation: rotate 5s linear infinite;
+    animation: rotate 5s linear 0s infinite normal;
 }
-.slide-anim {
-    animation: slide 5s linear;
+
+.pause-anim {
+    animation-play-state: paused;
 }
+
 @keyframes rotate {
     /*以百分比来规定改变发生的时间 也可以通过"from"和"to",等价于0% 和 100%*/
     0% {
@@ -87,17 +92,6 @@ const currentAnimClass = computed(() => {
     }
     100% {
         transform: rotate(360deg);
-    }
-}
-
-@keyframes slide {
-    /*以百分比来规定改变发生的时间 也可以通过"from"和"to",等价于0% 和 100%*/
-    0% {
-        /*rotate(2D旋转) scale(放大或者缩小) translate(移动) skew(翻转)*/
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(200);
     }
 }
 </style>
