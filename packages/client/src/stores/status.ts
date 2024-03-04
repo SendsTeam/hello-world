@@ -24,8 +24,13 @@ export const useStatusStore = defineStore('status-store', () => {
             this.showPostModal = false
         }
     })
+    const musicPlayerStatus = reactive({
+        isFixed: false,
+        fixedAudio: new Audio()
+    })
     return {
         currentPage,
-        mapPageStatus
+        mapPageStatus,
+        musicPlayerStatus
     }
 })

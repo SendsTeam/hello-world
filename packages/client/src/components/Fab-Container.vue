@@ -1,18 +1,10 @@
 <template>
     <var-fab type="primary" :direction="direction" :elevation="12">
-        <var-button class="action" type="success" round @click="handlePostCard">
-            <var-icon name="plus" />
-        </var-button>
-        <var-button class="action" type="info" round>
-            <var-icon name="account-circle" />
-        </var-button>
-        <var-button class="action" type="warning" round>
-            <var-icon name="bell" />
-        </var-button>
-
-        <var-button class="action" type="danger" round>
-            <var-icon name="delete" />
-        </var-button>
+        <var-tooltip type="success" content="发布你的卡片" placement="left">
+            <var-button class="action" type="success" round @click="handlePostCard">
+                <var-icon name="plus" />
+            </var-button>
+        </var-tooltip>
     </var-fab>
 </template>
 

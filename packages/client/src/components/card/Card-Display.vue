@@ -1,5 +1,5 @@
 <template>
-    <music-player />
+    <MusicPlayer />
     <var-card
         class="better-scroll"
         :style="displayCardStyle"
@@ -50,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import MusicPlayer from '@/components/Music-Player.vue'
+import MusicPlayer from '@/components/music-player/Music-Player.vue'
 import { useCardStore } from '@/stores/card'
 import { ImagePreview } from '@varlet/ui'
 import { ref } from 'vue'
