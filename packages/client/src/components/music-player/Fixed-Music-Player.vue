@@ -38,20 +38,22 @@ import type { Card } from '@/models/card'
 import { useCardStore } from '@/stores/card'
 import { computed, ref, watch } from 'vue'
 
-//Model
-const isPaused = defineModel<boolean>('isPaused', {
-    required: true
-})
-
 //Props
 const { audio, music } = defineProps<{
     audio: HTMLAudioElement
     music: Card['music']
 }>()
 
+//监听暂停信号
+const pauseSignal = defineModel<boolean>('pauseSignal', {
+    required: true
+})
+watch(pauseSignal, () => pause())
+
 //Events
 const emit = defineEmits<{
     unfix: []
+    pauseUnfixedAudio: []
 }>()
 
 //Store
@@ -70,7 +72,7 @@ const fixedPlayerStyle = {
 
 //音频控制
 //#region
-const status = ref<'play' | 'pause' | 'stop'>(isPaused.value ? 'pause' : 'play')
+const status = ref<'play' | 'pause' | 'stop'>(pauseSignal.value ? 'pause' : 'play')
 const anim = computed(() => {
     return {
         'rotate-anim': status.value === 'play' || status.value === 'pause',
@@ -78,11 +80,8 @@ const anim = computed(() => {
     }
 })
 
-watch(isPaused, (v) => {
-    v && pause()
-})
-
 function play() {
+    emit('pauseUnfixedAudio')
     audio.play()
     status.value = 'play'
 }

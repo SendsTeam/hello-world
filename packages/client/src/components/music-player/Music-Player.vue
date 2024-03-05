@@ -1,7 +1,8 @@
 <template>
     <FixedMusicPlayer
         v-if="isFixed"
-        v-model:isPaused="isPausedFixedAudio"
+        v-model:pauseSignal="pauseFixedSignal"
+        @pause-unfixed-audio="pauseUnfixedAudio"
         @unfix="handleUnfix"
         :audio="fixedAudio"
         :music="fixedMusic"
@@ -11,6 +12,7 @@
             @fix="handleFix"
             @pause-fixed-audio="pauseFixedAudio"
             v-model:audio="unfixedAudio"
+            v-model:pauseSignal="pauseUnfixedSignal"
             :music="cardStore.currentCard.music"
         />
     </div>
@@ -29,20 +31,23 @@ const cardStore = useCardStore()
 
 //音源
 //#region
-
 const fixedMusic = shallowRef<Card['music']>()
 const fixedAudio = shallowRef(new Audio())
 const unfixedAudio = shallowRef(new Audio())
-
-const isPausedFixedAudio = ref(true)
-const pauseFixedAudio = () => {
-    isPausedFixedAudio.value = true
-}
-
 //#endregion
 
+//暂停信号
+const pauseFixedSignal = ref(true)
+const pauseUnfixedSignal = ref(true)
+
+const pauseFixedAudio = () => {
+    pauseFixedSignal.value = !pauseFixedSignal.value
+}
+const pauseUnfixedAudio = () => {
+    pauseUnfixedSignal.value = !pauseUnfixedSignal.value
+}
+
 //更新音频url,直接预加载!
-//#region
 watchEffect(async () => {
     if (cardStore.currentCard.music) {
         unfixedAudio.value.src = await getMusicUrl(
@@ -51,11 +56,9 @@ watchEffect(async () => {
         )
     }
 })
-//#endregion
 
 //固定
 //#region
-
 const isFixed = ref(false)
 const handleFix = (audio: HTMLAudioElement, music: Card['music']) => {
     if (isFixed.value) {
@@ -67,7 +70,7 @@ const handleFix = (audio: HTMLAudioElement, music: Card['music']) => {
         isFixed.value = true
         fixedAudio.value = audio
         fixedMusic.value = toRaw(music)
-        isPausedFixedAudio.value = audio.paused //初始化fixed的播放状态
+        pauseFixedSignal.value = audio.paused //初始化fixed的播放状态
         unfixedAudio.value = new Audio() //重置引用
     }
 }

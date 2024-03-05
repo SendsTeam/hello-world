@@ -22,7 +22,8 @@
 
         <var-tooltip type="primary" content="固定">
             <var-button type="primary" @click="fixMusic">
-                <var-icon name="pin-outline" />
+                <var-icon v-if="isNeedToFixed" name="pin" />
+                <var-icon v-else name="pin-outline" />
             </var-button>
         </var-tooltip>
 
@@ -39,15 +40,20 @@ import type { Card } from '@/models/card'
 import { useCardStore } from '@/stores/card'
 import { useStatusStore } from '@/stores/status'
 import { Snackbar } from '@varlet/ui'
-import { toRaw, watch } from 'vue'
+import { computed, toRaw, watch } from 'vue'
 import { reactive } from 'vue'
 import { ref } from 'vue'
 
-//Model
+//Models
 const audio = defineModel<HTMLAudioElement>('audio', {
     required: true
 })
 
+//监听暂停信号
+const pauseSignal = defineModel<boolean>('pauseSignal', {
+    required: true
+})
+watch(pauseSignal, () => pause())
 
 //Events
 const emit = defineEmits<{
@@ -76,9 +82,11 @@ const isNeedToFixed = ref(false)
 //#region
 
 const status = ref<'play' | 'pause' | 'stop'>('stop')
-const anim = reactive({
-    'rotate-anim': false,
-    'pause-anim': false
+const anim = computed(() => {
+    return {
+        'rotate-anim': status.value === 'play' || status.value === 'pause',
+        'pause-anim': status.value === 'pause'
+    }
 })
 
 //关闭卡片后并且没有固定bgm将停止bgm
@@ -93,8 +101,7 @@ watch(
             emit('fix', audio.value, toRaw(cardStore.currentCard.music))
             //这里要重置状态,不然进入新卡片会直接默认固定!
             isNeedToFixed.value = false
-            anim['pause-anim'] = false
-            anim['rotate-anim'] = false
+            status.value = 'stop'
         } else {
             stop()
         }
@@ -105,22 +112,17 @@ function play() {
     emit('pauseFixedAudio')
     audio.value.play()
     status.value = 'play'
-    anim['rotate-anim'] = true
-    anim['pause-anim'] = false
 }
 
 function pause() {
     audio.value.pause()
     status.value = 'pause'
-    anim['pause-anim'] = true
 }
 
 function stop() {
     audio.value.pause()
     audio.value.currentTime = 0
     status.value = 'stop'
-    anim['pause-anim'] = false
-    anim['rotate-anim'] = false
 }
 
 function toggle() {
@@ -145,7 +147,7 @@ const copyMusicName = () => {
 const fixMusic = () => {
     isNeedToFixed.value = !isNeedToFixed.value
     if (isNeedToFixed.value) {
-        Snackbar.success('固定音乐')
+        Snackbar.success('固定音乐,关闭卡片后生效')
     } else {
         Snackbar.success('取消固定')
     }
