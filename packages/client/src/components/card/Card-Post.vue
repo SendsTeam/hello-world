@@ -39,6 +39,8 @@ const emptyCard: Card = {
     position: [0, 0],
     imgs: [],
     music: {
+        cover:'',
+        name:'',
         id: '',
         level: ''
     }
