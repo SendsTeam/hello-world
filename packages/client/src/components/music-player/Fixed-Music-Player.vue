@@ -1,6 +1,5 @@
 <template>
     <Teleport to="body">
-        <!-- 固定时的player -->
         <var-fab
             v-model:active="activeFab"
             :style="fixedPlayerStyle"
@@ -10,7 +9,7 @@
             direction="right"
         >
             <template #trigger>
-                <var-avatar :class="anim" :src="cover" @click="() => toggle()" />
+                <var-avatar :class="anim" :src="music?.cover" @click="() => toggle()" />
             </template>
 
             <var-tooltip type="primary" content="复制歌名">
@@ -35,26 +34,28 @@
 </template>
 
 <script setup lang="ts">
+import type { Card } from '@/models/card'
 import { useCardStore } from '@/stores/card'
-import { useStatusStore } from '@/stores/status'
-import { reactive, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+
+//Model
+const isPaused = defineModel<boolean>('isPaused', {
+    required: true
+})
 
 //Props
-const { isFixed, cover} = defineProps<{
-    isFixed: boolean //是否固定
-    cover: string //唱片封面
-    // audio: T
+const { audio, music } = defineProps<{
+    audio: HTMLAudioElement
+    music: Card['music']
 }>()
 
 //Events
 const emit = defineEmits<{
-    fixed: []
-    unFixed: []
+    unfix: []
 }>()
 
 //Store
 const cardStore = useCardStore()
-const statusStore = useStatusStore()
 
 //样式
 //#region
@@ -69,40 +70,42 @@ const fixedPlayerStyle = {
 
 //音频控制
 //#region
-const status = ref<'play' | 'pause' | 'stop'>('stop')
-const anim = reactive({
-    'rotate-anim': false,
-    'pause-anim': false
+const status = ref<'play' | 'pause' | 'stop'>(isPaused.value ? 'pause' : 'play')
+const anim = computed(() => {
+    return {
+        'rotate-anim': status.value === 'play' || status.value === 'pause',
+        'pause-anim': status.value === 'pause'
+    }
+})
+
+watch(isPaused, (v) => {
+    v && pause()
 })
 
 function play() {
-    statusStore.musicPlayerStatus.fixedAudio.play()
+    audio.play()
     status.value = 'play'
-    anim['rotate-anim'] = true
-    anim['pause-anim'] = false
 }
 
 function pause() {
-    statusStore.musicPlayerStatus.fixedAudio.pause()
+    audio.pause()
     status.value = 'pause'
-    anim['pause-anim'] = true
 }
 
 function stop() {
-    statusStore.musicPlayerStatus.fixedAudio.pause()
-    statusStore.musicPlayerStatus.fixedAudio.currentTime = 0
+    audio.pause()
+    // eslint-disable-next-line vue/no-mutating-props
+    audio.currentTime = 0
     status.value = 'stop'
-    anim['pause-anim'] = false
-    anim['rotate-anim'] = false
 }
 
 //注意点击后才加载
 async function toggle() {
-    statusStore.musicPlayerStatus.fixedAudio.paused ? play() : pause()
+    audio.paused ? play() : pause()
 }
 //#endregion
 
-//音频交互栏
+//音频交互
 //#region
 const activeFab = ref(false)
 const copyMusicName = () => {
@@ -117,7 +120,7 @@ const copyMusicName = () => {
 }
 //取消固定bgm
 const unfixMusic = () => {
-    emit('unFixed')
+    emit('unfix')
     Snackbar.success('取消固定')
     stop()
 }
@@ -151,4 +154,3 @@ const replayMusic = () => {
     }
 }
 </style>
-reactive, , watch

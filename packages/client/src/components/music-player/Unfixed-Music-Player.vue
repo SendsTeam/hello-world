@@ -1,6 +1,5 @@
 <template>
     <var-fab
-        v-show="cardStore.currentCard.music"
         v-model:active="activeFab"
         :style="unfixedPlayerStyle"
         type="primary"
@@ -10,7 +9,7 @@
         <template #trigger>
             <var-avatar
                 :class="anim"
-                :src="cardStore.currentCard.imgs[0]"
+                :src="cardStore.currentCard.music?.cover"
                 @click="() => toggle()"
             />
         </template>
@@ -36,17 +35,29 @@
 </template>
 
 <script setup lang="ts">
+import type { Card } from '@/models/card'
 import { useCardStore } from '@/stores/card'
 import { useStatusStore } from '@/stores/status'
-import { getMusicUrl } from '@hello-world/api'
 import { Snackbar } from '@varlet/ui'
-import { watch } from 'vue'
+import { toRaw, watch } from 'vue'
 import { reactive } from 'vue'
-import { watchEffect } from 'vue'
 import { ref } from 'vue'
 
-const cardStore = useCardStore()
+//Model
+const audio = defineModel<HTMLAudioElement>('audio', {
+    required: true
+})
+
+
+//Events
+const emit = defineEmits<{
+    fix: [audio: HTMLAudioElement, music: Card['music']]
+    pauseFixedAudio: []
+}>()
+
+//Store
 const statusStore = useStatusStore()
+const cardStore = useCardStore()
 
 //魔改样式
 const unfixedPlayerStyle = {
@@ -61,23 +72,8 @@ const unfixedPlayerStyle = {
 
 const isNeedToFixed = ref(false)
 
-//更新音频
-//#region
-const newUrl = ref('')
-watchEffect(async () => {
-    if (cardStore.currentCard.music) {
-        const url = await getMusicUrl(
-            cardStore.currentCard.music.id,
-            cardStore.currentCard.music.level
-        )
-        newUrl.value = url
-    }
-})
-//#endregion
-
 //音频控制
 //#region
-const audio = ref(new Audio())
 
 const status = ref<'play' | 'pause' | 'stop'>('stop')
 const anim = reactive({
@@ -92,19 +88,21 @@ watch(
         if (isOpen) {
             return
         }
-
+        //关闭卡片后
         if (isNeedToFixed.value) {
-            statusStore.musicPlayerStatus.isFixed = true
-            statusStore.musicPlayerStatus.fixedAudio = audio.value
-        }
-        if (!statusStore.musicPlayerStatus.isFixed) {
+            emit('fix', audio.value, toRaw(cardStore.currentCard.music))
+            //这里要重置状态,不然进入新卡片会直接默认固定!
             isNeedToFixed.value = false
+            anim['pause-anim'] = false
+            anim['rotate-anim'] = false
+        } else {
             stop()
         }
     }
 )
 
 function play() {
+    emit('pauseFixedAudio')
     audio.value.play()
     status.value = 'play'
     anim['rotate-anim'] = true
@@ -125,14 +123,8 @@ function stop() {
     anim['rotate-anim'] = false
 }
 
-//注意点击后才加载
-async function toggle() {
-    if (audio.value.src === '' || audio.value.src !== newUrl.value) {
-        audio.value = new Audio(newUrl.value)
-        return play()
-    } else {
-        audio.value.paused ? play() : pause()
-    }
+function toggle() {
+    audio.value.paused ? play() : pause()
 }
 //#endregion
 
@@ -154,10 +146,8 @@ const fixMusic = () => {
     isNeedToFixed.value = !isNeedToFixed.value
     if (isNeedToFixed.value) {
         Snackbar.success('固定音乐')
-        statusStore.musicPlayerStatus.fixedAudio.src = audio.value.src
     } else {
         Snackbar.success('取消固定')
-        statusStore.musicPlayerStatus.fixedAudio = new Audio()
     }
 }
 //重新播放bgm

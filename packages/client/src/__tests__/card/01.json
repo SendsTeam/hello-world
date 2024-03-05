@@ -7,6 +7,7 @@
         "imgs": ["https://p.sda1.dev/15/69e331f6c7f53d7a0d9298d34bae1159/image.png"],
         "music": {
             "name": "超级弹丸论破2",
+            "cover": "https://p.sda1.dev/15/69e331f6c7f53d7a0d9298d34bae1159/image.png",
             "id": "2001943290",
             "level": "exhigh"
         }
@@ -19,6 +20,7 @@
         "imgs": ["https://p2.bahamut.com.tw/B/2KU/62/34df6e449e7f31c5f45fbb29391myt65.JPG"],
         "music": {
             "name": "碧蓝幻想RELINK",
+            "cover": "https://p2.bahamut.com.tw/B/2KU/62/34df6e449e7f31c5f45fbb29391myt65.JPG",
             "id": "2123822470",
             "level": "exhigh"
         }
@@ -33,6 +35,7 @@
         ],
         "music": {
             "name": "DARK SOULⅢ",
+            "cover": "https://p.sda1.dev/15/b62246ce79aa356bc97afd06fa3a2f5e/98eec996cb9b314958b8d4596202916b.png",
             "id": "407677581",
             "level": "exhigh"
         }
@@ -48,6 +51,7 @@
         ],
         "music": {
             "name": "使一颗心免于哀伤",
+            "cover": "https://p.sda1.dev/15/b8e31a1e6a8bea19c31b33694f259619/d0857a73996d4ed0504d5b91f8708bbb.png",
             "id": "2124631325",
             "level": "exhigh"
         }

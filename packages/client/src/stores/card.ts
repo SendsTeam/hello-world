@@ -15,6 +15,7 @@ export const useCardStore = defineStore('card-store', () => {
         imgs: [],
         music: {
             name: '',
+            cover: '',
             id: '',
             level: ''
         }
