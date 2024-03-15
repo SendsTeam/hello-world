@@ -90,6 +90,9 @@ importers:
       prettier:
         specifier: ^3.0.3
         version: 3.2.5
+      rollup-plugin-import-to-const:
+        specifier: ^0.1.4
+        version: 0.1.4
       typescript:
         specifier: ~5.3.0
         version: 5.3.3
@@ -110,6 +113,8 @@ importers:
         version: 1.8.27(typescript@5.3.3)
 
   packages/api: {}
+
+  packages/card: {}
 
   packages/client:
     dependencies:
@@ -3112,6 +3117,13 @@ packages:
     hasBin: true
     dependencies:
       glob: 7.2.3
+    dev: true
+
+  /rollup-plugin-import-to-const@0.1.4:
+    resolution: {integrity: sha512-G8EohFfgXzdLODqNu2v0K1hGEtPASqlWjkfMWg+wy13K0S47iRqyj0V003Cn2gqTdF5eKElpvBnWQWEjKuCclw==}
+    dependencies:
+      acorn: 8.11.3
+      magic-string: 0.30.7
     dev: true
 
   /rollup@4.10.0:

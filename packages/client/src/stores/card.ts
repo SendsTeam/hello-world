@@ -7,6 +7,7 @@ import type { Card } from '@/models/card'
 export const useCardStore = defineStore('card-store', () => {
     const cards = ref<Card[]>(testCards as Card[])
     const postedCards = ref<Card[]>([])
+    //空卡片模板
     const emptyCard: Card = {
         title: '',
         subtitle: '',

@@ -1,9 +1,8 @@
 {
-    "name": "@hello-world/client",
-    "private": true,
+    "name": "@hello-world/card",
     "version": "1.0.0",
-    "description": "hello-world client",
-    "main": "src/main.ts",
+    "description": "",
+    "main": "index.js",
     "scripts": {
         "dev": "vite --host 0.0.0.0 --port=5000",
         "build": "run-p type-check \"build-only {@}\" --",
@@ -16,9 +15,5 @@
     },
     "keywords": [],
     "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "@hello-world/api": "workspace:^",
-        "@hello-world/hooks": "workspace:^"
-    }
+    "license": "ISC"
 }

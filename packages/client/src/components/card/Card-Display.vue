@@ -10,7 +10,7 @@
     >
         <template #image>
             <var-swipe
-                v-if="cardStore.currentCard.imgs.length > 1"
+                v-if="cardStore.currentCard.imgs && cardStore.currentCard.imgs.length > 1"
                 navigation="hover"
                 @change="(index) => (previewInitialIndex = index)"
             >
@@ -19,7 +19,7 @@
                 </var-swipe-item>
             </var-swipe>
             <var-image
-                v-else-if="cardStore.currentCard.imgs.length === 1"
+                v-else-if="cardStore.currentCard.imgs && cardStore.currentCard.imgs.length === 1"
                 fit="contain"
                 @click="preview"
                 :src="cardStore.currentCard.imgs[0]"

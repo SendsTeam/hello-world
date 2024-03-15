@@ -60,7 +60,9 @@
         "title": "蔚蓝档案",
         "subtitle": "ᕕ(◠ڼ◠)ᕗ",
         "content": "Nam semper ultricies felis sit amet tempus. Vestibulum porta imperdiet mattis. Quisque eget enim ut est molestie posuere a non urna. Aliquam erat volutpat. Nullam eu arcu vel lacus iaculis molestie eget nec augue. Proin vel nulla eget massa ullamcorper condimentum. Nunc vel congue nulla, quis finibus velit. Cras ullamcorper massa quis dolor pretium maximus. Etiam sagittis sed metus vitae egestas. Nullam malesuada neque eget nisi tempor auctor at sit amet augue. Morbi vel porttitor lectus. Vivamus sed vulputate metus. Quisque sit amet sapien bibendum, consequat dolor dapibus, pellentesque sapien. Donec quis velit accumsan, volutpat orci quis, venenatis velit. Sed mauris velit, semper a ornare quis, ultricies a sem. Vivamus sagittis tempus ligula vitae blandit.",
-        "position": [0, 0],
-        "imgs": []
+        "position": [0, 0]
+    },
+    {
+        "link": "https://tyee-img.oss-cn-hangzhou.aliyuncs.com/test-card.mjs"
     }
 ]
