@@ -15,10 +15,10 @@ export default defineConfig({
     },
     build: {
         lib: {
-            entry: resolve(__dirname, 'src/index.ts'),
+            entry: resolve(__dirname, 'src/main.ts'),
             formats: ['es'],
-            name: 'test-card',
-            fileName: 'test-card'
+            name: 'card',
+            fileName: 'card'
         },
         rollupOptions: {
             // 确保外部化处理那些你不想打包进库的依赖
